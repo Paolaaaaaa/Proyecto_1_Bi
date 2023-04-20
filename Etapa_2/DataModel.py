@@ -1,5 +1,14 @@
 from pydantic import BaseModel
-from sklearn.pipeline import Pipeline
+import re, string, unicodedata
+from num2words import num2words
+from nltk import word_tokenize, sent_tokenize
+from nltk.corpus import stopwords
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, HashingVectorizer
+from sklearn.preprocessing import FunctionTransformer
+import pandas as pd
+
+from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from joblib import dump
 class DataModel(BaseModel):
@@ -10,7 +19,7 @@ def columns(self):
         return ["review_es"]
 
 
- def remove_non_ascii(words):
+def remove_non_ascii(words):
     """Remove non-ASCII characters from list of tokenized words"""
     new_words = []
     for word in words:
@@ -81,7 +90,7 @@ def generate_pipeLine():
 def use_pipeline(movie):
     filename = 'modelo.joblib'
     df_recent = pd.read_csv('./data/'+movie+'.csv', sep=',', encoding = 'utf-8') # Lectura de los datos recientes
-    pipeline = joblib.load(filename)
+    pipeline = dump.load(filename)
     y_predicted =  pipeline.predict(df_recent)
     return y_predicted
 
