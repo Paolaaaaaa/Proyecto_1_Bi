@@ -78,31 +78,4 @@ def clean_text(reviews):
     reviews = reviews.apply(lambda x: ' '.join(map(str, x)))
 
     return reviews
-def join_tokens(tokens):
-    return tokens.apply(lambda x: ' '.join(map(str, x)))
 
-def generate_pipeLine():
-    df_peliculas = pd.read_csv('./data/MovieReviews.csv', sep=',', encoding = 'utf-8')
-
-    x_train_m2, x_test_m2, y_train_m2,  y_test_m2  = train_test_split(df_peliculas['review_es'], df_peliculas['sentimiento'], test_size=0.2, random_state=42)
-
-    y_train_m2 = (y_train_m2 == 'positivo').astype(int)
-    y_test_m2 = (y_test_m2 == 'positivo').astype(int)
-
-    pipeline = Pipeline(
-        [
-        
-            ('clean_text', FunctionTransformer(clean_text)),
-            ('vectorizador', CountVectorizer(analyzer='word')),
-            ('model', LogisticRegression())
-        ]
-    )
-    vectorizer = TfidfVectorizer()
-    pipeline.fit(x_train_m2, y_train_m2)
-    dump(pipeline, 'modelo.joblib')
-    y_pred = pipeline.predict(x_test_m2)
-    print("Precisión:", accuracy_score(y_test_m2, y_pred))
-    print("Matriz de confusión:\n", confusion_matrix(y_test_m2, y_pred))
-
-print("Generado Pipeline:")
-generate_pipeLine()

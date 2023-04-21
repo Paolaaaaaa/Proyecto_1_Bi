@@ -1,21 +1,9 @@
 from pydantic import BaseModel
-import re, string, unicodedata
-from num2words import num2words
-from nltk import word_tokenize, sent_tokenize
-from nltk.corpus import stopwords
-from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, HashingVectorizer
-from sklearn.preprocessing import FunctionTransformer
 import pandas as pd
-import nltk
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-import numpy as np
-
-nltk.download('stopwords')
-nltk.download('punkt')
-from sklearn.linear_model import LogisticRegression
+import csv
+from clean_text import clean_text
 from sklearn.pipeline import Pipeline
-from joblib import dump
+import joblib
 class DataModel(BaseModel):
     review_es: str
 
@@ -25,11 +13,45 @@ def columns(self):
 
 
 def use_pipeline(movie):
-    filename = 'modelo.joblib'
+    filename = './modelo.joblib'
     df_recent = pd.read_csv('./data/'+movie+'.csv', sep=',', encoding = 'utf-8') # Lectura de los datos recientes
-    pipeline = dump.load(filename)
-    y_predicted =  pipeline.predict(df_recent)
+    pipeline = joblib.load(filename)
+    print("reviews")
+    print(df_recent["review_es"])
+    y_predicted =  pipeline.predict(df_recent["review_es"])
     return y_predicted
 
+
+
+def create_csv_movie( nombre_movie,review):
+    id_movie = -1
+
+    with open('./data/movies.txt', 'r') as f:
+        id_movie = len(f.readlines())+1
+    f.close()
+    
+    with open('./data/movies.txt', mode='a') as file:
+        file.write("\n "+str(id_movie)+","+nombre_movie)
+    file.close()
+
+    with open('./data/'+str(id_movie)+'.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['', 'review_es'])
+        writer.writerow(['0', "'" +review +"'"])
+    file.close()
+
+
+
+def find_movie (movie_id):
+    with open('./data/movies.txt', mode='r') as file:
+            contenido = file.read()
+            if movie_id in contenido:
+                 file.close()
+
+                 return True
+            else:
+                 file.close()
+
+                 return False
 
 

@@ -4,7 +4,7 @@ from fastapi import FastAPI,Request
 
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
-
+import DataModel as dm
 
 
 app = FastAPI()
@@ -27,6 +27,19 @@ def doc1(request: Request):
    
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-   return {"item_id": item_id, "q": q}
+@app.get("/movie/{movie_id}")
+def read_item(movie_id: int,q: str = None):
+
+   if(dm.find_movie(str(movie_id))):
+       return dm.use_pipeline(str(movie_id))
+   else:
+       return False
+    
+@app.get("/movie/create/{nombre_movie}/{review}")# Para crear un nuevo csv
+def read_item(nombre_movie: str, review:str):
+      if(dm.find_movie(str(nombre_movie))):
+          return True
+      else:
+          dm.create_csv_movie(str(nombre_movie),review)
+      return 
+
