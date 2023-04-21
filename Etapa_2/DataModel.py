@@ -13,7 +13,7 @@ def columns(self):
 
 
 def use_pipeline(movie):
-    filename = './modelo.joblib'
+    filename = 'modelo.joblib'
     df_recent = pd.read_csv('./data/'+movie+'.csv', sep=',', encoding = 'utf-8') # Lectura de los datos recientes
     pipeline = joblib.load(filename)
     print("reviews")
