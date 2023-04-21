@@ -17,6 +17,7 @@ def use_pipeline(movie):
     df_recent = pd.read_csv('./data/'+movie+'.csv', sep=',', encoding = 'utf-8') # Lectura de los datos recientes
     pipeline = joblib.load(filename)
     print("reviews")
+    df_recent["review_es"]=clean_text(df_recent["review_es"])
     print(df_recent["review_es"])
     y_predicted =  pipeline.predict(df_recent["review_es"])
     return y_predicted

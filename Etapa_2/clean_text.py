@@ -1,3 +1,22 @@
+from pydantic import BaseModel
+import re, string, unicodedata
+from num2words import num2words
+from nltk import word_tokenize, sent_tokenize
+from nltk.corpus import stopwords
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, HashingVectorizer
+from sklearn.preprocessing import FunctionTransformer
+import pandas as pd
+import nltk
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import numpy as np
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+nltk.download('stopwords')
+nltk.download('punkt')
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+from joblib import dump
+
 def remove_non_ascii(words):
     """Remove non-ASCII characters from list of tokenized words"""
     new_words = []

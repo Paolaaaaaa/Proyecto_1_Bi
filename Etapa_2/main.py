@@ -25,15 +25,20 @@ def doc1(request: Request):
    context ={'request':request}
    return templates.TemplateResponse("doc2.html",context)
    
-
+#usa el modelo predictivo, todavía no funciona por completo pero ya casi
 
 @app.get("/movie/{movie_id}")
 def read_item(movie_id: int,q: str = None):
 
    if(dm.find_movie(str(movie_id))):
-       return dm.use_pipeline(str(movie_id))
+       print(type(dm.use_pipeline(str(movie_id))))
+       return True
    else:
        return False
+   
+
+
+#Crea un nuevo csv y lo adiciona a la lista de peliculas
     
 @app.get("/movie/create/{nombre_movie}/{review}")# Para crear un nuevo csv
 def read_item(nombre_movie: str, review:str):
