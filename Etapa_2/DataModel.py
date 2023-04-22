@@ -24,15 +24,15 @@ def use_pipeline(movie):
 
 
 
-def create_csv_movie( nombre_movie,review):
+def create_csv_movie( nombre_movie,review,imagen,descripcion):
     id_movie = -1
 
     with open('./data/movies.txt', 'r') as f:
-        id_movie = len(f.readlines())+1
+        id_movie = len(f.readlines())
     f.close()
     
     with open('./data/movies.txt', mode='a') as file:
-        file.write("\n "+str(id_movie)+","+nombre_movie)
+        file.write("\n "+str(id_movie)+","+nombre_movie+","+imagen+","+descripcion)
     file.close()
 
     with open('./data/'+str(id_movie)+'.csv', mode='w', newline='') as file:
@@ -41,6 +41,17 @@ def create_csv_movie( nombre_movie,review):
         writer.writerow(['0', "'" +review +"'"])
     file.close()
 
+def add_review(movie_id,review):
+
+    id_movie = -1
+
+    with open('./data/'+str(movie_id)+'.csv', 'r') as f:
+        id_movie = len(f.readlines())
+    f.close()
+    with open('./data/'+str(movie_id)+'.csv', mode='a') as file:
+        file.write("\n "+str(id_movie)+","+review)
+    file.close()
+    return True
 
 
 def find_movie (movie_id):

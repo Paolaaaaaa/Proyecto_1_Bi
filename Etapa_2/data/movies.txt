@@ -1,3 +1,1 @@
-id,movie
- 2,Shrek
- 3,Shrek 1
+id,movie,imagen,descripcion

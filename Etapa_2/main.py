@@ -31,7 +31,7 @@ def doc1(request: Request):
 def read_item(movie_id: int,q: str = None):
 
    if(dm.find_movie(str(movie_id))):
-       print(type(dm.use_pipeline(str(movie_id))))
+       print((dm.use_pipeline(str(movie_id))))
        return True
    else:
        return False
@@ -40,11 +40,18 @@ def read_item(movie_id: int,q: str = None):
 
 #Crea un nuevo csv y lo adiciona a la lista de peliculas
     
-@app.get("/movie/create/{nombre_movie}/{review}")# Para crear un nuevo csv
+@app.get("/movie/{nombre_movie}/create/{review}/{imagen}/{descripcion}")# Para crear un nuevo csv
+def read_item(nombre_movie: str, review:str, imagen:str, descripcion:str):
+      if(dm.find_movie(str(nombre_movie))):
+          
+          return True 
+      else:
+          dm.create_csv_movie(str(nombre_movie),review,imagen,descripcion)
+      return 
+# Para crear un nuevo review
+@app.get("/movie/{nombre_movie}/create/{review}")
 def read_item(nombre_movie: str, review:str):
       if(dm.find_movie(str(nombre_movie))):
-          return True
+        return dm.add_review(movie_id,review)
       else:
-          dm.create_csv_movie(str(nombre_movie),review)
-      return 
-
+        return False
