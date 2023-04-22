@@ -40,18 +40,17 @@ def read_item(movie_id: int,q: str = None):
 
 #Crea un nuevo csv y lo adiciona a la lista de peliculas
     
-@app.get("/movie/{nombre_movie}/create/{review}/{imagen}/{descripcion}")# Para crear un nuevo csv
-def read_item(nombre_movie: str, review:str, imagen:str, descripcion:str):
+@app.get("/movie/create/{nombre_movie}/{review}")# Para crear un nuevo csv
+def read_item(nombre_movie: str, review:str):
       if(dm.find_movie(str(nombre_movie))):
-          
-          return True 
+          return dm.add_review(nombre_movie,review)
       else:
-          dm.create_csv_movie(str(nombre_movie),review,imagen,descripcion)
-      return 
+          dm.create_csv_movie(str(nombre_movie),review)
+      return True
 # Para crear un nuevo review
 @app.get("/movie/{nombre_movie}/create/{review}")
 def read_item(nombre_movie: str, review:str):
       if(dm.find_movie(str(nombre_movie))):
-        return dm.add_review(movie_id,review)
+        return dm.add_review(nombre_movie,review)
       else:
         return False
