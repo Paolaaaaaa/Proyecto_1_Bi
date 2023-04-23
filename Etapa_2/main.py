@@ -28,13 +28,18 @@ def doc1(request: Request):
 #usa el modelo predictivo, todavía no funciona por completo pero ya casi
 
 @app.get("/movie/{movie_id}")
-def read_item(movie_id: int,q: str = None):
+def show_moview(movie_id: int, request: Request):
 
    if(dm.find_movie(str(movie_id))):
+       movie_info=dm.get_Movie(str(movie_id))
        print((dm.use_pipeline(str(movie_id))))
-       return True
+       context ={'request':request}
+
+       return templates.TemplateResponse("template_movie.html", {"movie_title": movie_info[1], "movie_img": movie_info[2], "descripcion": movie_info[3], "request":request})
    else:
-       return False
+       context ={'request':request}
+
+       return templates.TemplateResponse("template_error.html", context)
    
 
 
@@ -54,3 +59,7 @@ def read_item(nombre_movie: str, review:str):
         return dm.add_review(nombre_movie,review)
       else:
         return False
+      
+
+
+
