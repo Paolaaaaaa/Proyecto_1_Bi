@@ -1,14 +1,52 @@
+import os
 from typing import Optional
 
-from fastapi import FastAPI,Request
+from fastapi import FastAPI, HTTPException,Request
 
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
+from pydantic import BaseModel, validator
 import DataModel as dm
 
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+
+
+from fastapi import FastAPI, UploadFile, File
+
+app = FastAPI()
+
+class CsvFile(BaseModel):
+    csv_file: UploadFile
+@app.post("/data/archivo.csv")
+async def save_csv_file(csv_file: bytes = File(...)):
+    # Código para guardar el archivo CSV aquí
+    # ...
+
+    # Definir la ruta completa de la carpeta "data" en el servidor
+    data_folder = "./data"
+
+    # Verificar si la carpeta "data" existe y crearla si es necesario
+    if not os.path.exists(data_folder):
+        os.makedirs(data_folder)
+
+    # Definir la ruta completa del archivo CSV en la carpeta "data"
+    csv_path = os.path.join(data_folder, "archivo.csv")
+
+    # Escribir el contenido del archivo CSV en el disco
+    with open(csv_path, "wb") as f:
+        f.write(csv_file)
+
+    # Retornar una respuesta indicando que el archivo fue guardado correctamente
+    return {"message": "Archivo guardado correctamente"}
+
+
+
+
+
+
+
 
 @app.get("/")# Interface principal
 def read_root():
@@ -27,6 +65,12 @@ def doc1(request: Request):
    
 #usa el modelo predictivo, todavía no funciona por completo pero ya casi
 
+@app.get("/index/data/archivo.csv",response_class=HTMLResponse) #va a mostrar doc 2 
+def doc1(request: Request):
+   context ={'request':request}
+   return templates.TemplateResponse("doc2.html",context)
+
+
 @app.get("/movie/{movie_id}")
 def show_moview(movie_id: int, request: Request):
 
@@ -42,7 +86,10 @@ def show_moview(movie_id: int, request: Request):
        return templates.TemplateResponse("template_error.html", context)
    
 
-
+@app.get("/index/",response_class=HTMLResponse)
+def index(request: Request):
+   context ={'request':request}
+   return templates.TemplateResponse("index.html",context)
 #Crea un nuevo csv y lo adiciona a la lista de peliculas
     
 @app.get("/movie/create/{nombre_movie}/{review}")# Para crear un nuevo csv
