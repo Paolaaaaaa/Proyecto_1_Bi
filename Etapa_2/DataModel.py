@@ -66,4 +66,20 @@ def find_movie (movie_id):
 
                  return False
 
+def get_Movie (movie_id):
+
+    with open('./data/movies.txt', mode='r') as file:
+            lineas = file.readlines()
+            for linea in lineas:
+                campos = linea.strip().split(",")
+                print(campos[0])
+                print(movie_id)
+
+                if campos[0]==movie_id:
+                    
+                    file.close() 
+                    return campos
+            file.close()
+            return False
+     
 
