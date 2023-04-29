@@ -1,4 +1,3 @@
-import os
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException,Request
@@ -7,6 +6,8 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, validator
 import DataModel as dm
+import os
+import shutil
 
 
 app = FastAPI()
@@ -17,31 +18,19 @@ from fastapi import FastAPI, UploadFile, File
 
 app = FastAPI()
 
-class CsvFile(BaseModel):
-    csv_file: UploadFile
-@app.post("/data/archivo.csv")
-async def save_csv_file(csv_file: bytes = File(...)):
-    # Código para guardar el archivo CSV aquí
-    # ...
 
-    # Definir la ruta completa de la carpeta "data" en el servidor
-    data_folder = "./data"
+@app.post("/upload-csv",response_class=HTMLResponse)
+async def upload_csv(file: UploadFile = File(...)):
+    file_path = os.path.join("./data", "movie.csv")
+    with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+    data=dm.use_pipeline().tolist()
+    print(dm.use_pipeline())
 
-    # Verificar si la carpeta "data" existe y crearla si es necesario
-    if not os.path.exists(data_folder):
-        os.makedirs(data_folder)
-
-    # Definir la ruta completa del archivo CSV en la carpeta "data"
-    csv_path = os.path.join(data_folder, "archivo.csv")
-
-    # Escribir el contenido del archivo CSV en el disco
-    with open(csv_path, "wb") as f:
-        f.write(csv_file)
-
-    # Retornar una respuesta indicando que el archivo fue guardado correctamente
-    return {"message": "Archivo guardado correctamente"}
-
-
+    context = {"request": {"data": data}, "extensions": {}}
+    
+    # renderizar el archivo HTML con los datos
+    return templates.TemplateResponse("grafs.html", context=context)
 
 
 

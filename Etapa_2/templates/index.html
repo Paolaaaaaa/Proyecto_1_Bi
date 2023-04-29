@@ -56,23 +56,27 @@
     function handleFileSelect() {
         const file = document.getElementById('csv-file').files[0];
         const reader = new FileReader();
-
+    
         reader.onload = function(e) {
             const csv = e.target.result;
             console.log(csv);
-            const blob = new Blob([csv], {type: 'text/csv'});
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/data/archivo.csv');
-            xhr.setRequestHeader('Content-Type', 'text/csv');
-            xhr.send(blob);
-
+    
+            const formData = new FormData();
+            formData.append('file', file, file.name);
+    
+            fetch('/upload-csv', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                console.log(response);
+            }).catch(error => {
+                console.error(error);
+            });
         }
-
+    
         reader.readAsText(file);
-        
-
-
     }
+    
 </script>
 
 </html>
