@@ -1,6 +1,7 @@
 from typing import Optional
-
+import json
 from fastapi import FastAPI, HTTPException,Request
+from fastapi.responses import RedirectResponse
 import matplotlib.pyplot as plt
 
 from fastapi.templating import Jinja2Templates
@@ -19,6 +20,7 @@ from fastapi import FastAPI, UploadFile, File
 
 app = FastAPI()
 
+app.data = []
 
 @app.post("/upload-csv",response_class=HTMLResponse)
 async def upload_csv(file: UploadFile = File(...)):
@@ -29,18 +31,21 @@ async def upload_csv(file: UploadFile = File(...)):
     print(dm.use_pipeline())
     img = dm.render_img(data)
 
+    app.data = data
+
     context = {"request": {"data": data}, "extensions": {},"graph":img}
     
     # renderizar el archivo HTML con los datos
-    return templates.TemplateResponse("template_error.html", context=context)
+    return templates.TemplateResponse("grafs.html", context=context)
 
 
-
-
-
+@app.get("/grafs/",response_class=HTMLResponse)# va a motrar grafs
+def graf(request: Request):
+    context = {"request": request, "data": app.data}
+    return templates.TemplateResponse("grafs.html", context=context)
 
 @app.get("/")# Interface principal
-def read_root():
+def read_root():  
    return {"Hello": "World"}
 
 
