@@ -4,6 +4,11 @@ import csv
 from clean_text import clean_text
 from sklearn.pipeline import Pipeline
 import joblib
+import matplotlib.pyplot as plt
+import io
+import base64
+
+
 class DataModel(BaseModel):
     review_es: str
 
@@ -81,5 +86,24 @@ def get_Movie (movie_id):
                     return campos
             file.close()
             return False
+    
+
+
+def render_img(data):
+    count_1 = data.count(1)
+    count_0 = data.count(0)
+    labels = ['Positivos', 'Negativos']
+    values = [count_1, count_0]
+    plt.bar(labels, values)
+    plt.title('Frecuencia de comentarios positivos y negativos en los datos')
+    plt.xlabel('Valor')
+    plt.ylabel('cantidad')
+    img_bytes = io.BytesIO()
+    plt.savefig(img_bytes, format='png')
+    img_bytes.seek(0)
+    encoded_img = base64.b64encode(img_bytes.read()).decode()
+    
+    return encoded_img
+     
      
 

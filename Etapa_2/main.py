@@ -1,6 +1,7 @@
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException,Request
+import matplotlib.pyplot as plt
 
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
@@ -26,11 +27,12 @@ async def upload_csv(file: UploadFile = File(...)):
             shutil.copyfileobj(file.file, buffer)
     data=dm.use_pipeline().tolist()
     print(dm.use_pipeline())
+    img = dm.render_img(data)
 
-    context = {"request": {"data": data}, "extensions": {}}
+    context = {"request": {"data": data}, "extensions": {},"graph":img}
     
     # renderizar el archivo HTML con los datos
-    return templates.TemplateResponse("grafs.html", context=context)
+    return templates.TemplateResponse("template_error.html", context=context)
 
 
 
@@ -50,7 +52,7 @@ def doc2(request: Request):
 @app.get("/doc/",response_class=HTMLResponse) #va a mostrar doc 2 
 def doc1(request: Request):
    context ={'request':request}
-   return templates.TemplateResponse("doc2.html",context)
+   return templates.TemplateResponse("doc1.html",context)
    
 #usa el modelo predictivo, todavía no funciona por completo pero ya casi
 
