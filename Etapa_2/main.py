@@ -45,8 +45,9 @@ def graf(request: Request):
     return templates.TemplateResponse("grafs.html", context=context)
 
 @app.get("/")# Interface principal
-def read_root():  
-   return {"Hello": "World"}
+def read_root(request: Request):  
+   context ={'request':request}
+   return templates.TemplateResponse("index.html",context)
 
 
 
