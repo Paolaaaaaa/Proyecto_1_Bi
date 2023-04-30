@@ -48,15 +48,23 @@
     <div class="container mt-5 text-center text-white">
         <div class="row">
             <div class="col-sm-2">
-    
+                <canvas id="mypie" style="width:100%"></canvas> 
+
             </div>
+   
+
             <div class="col-sm-8 loadingContainer">
 
-                <canvas id="myChart" style="width:100%"></canvas>    
+                <canvas id="myChart" style="width:100%"></canvas> 
+
                 
             </div>
+
+       
+
             <div class="col-sm-2">
-    
+                <canvas id="img_" style="width:100%"></canvas>    
+
             </div>
         </div>
      </div>
@@ -91,9 +99,9 @@
     console.log(positivos);
     console.log(negativos);
 
-    var xValues = ["Positivos", "Negativos"];
-    var yValues = [positivos, negativos];
-    var barColors = ["#46BFBD", "red"];
+    var xValues = ["","Positivos", "Negativos"];
+    var yValues = ["",positivos, negativos];
+    var barColors = ["","#46BFBD", "red"];
 
     new Chart("myChart", {
     type: "bar",
@@ -134,4 +142,31 @@
     console.log(porNeg)
 
 </script>
+<script>
+xvals = ["",porPos, porNeg]
+
+
+
+new Chart("mypie", {
+  type: "doughnut",
+  data: {
+    labels: xvals,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    title: {
+            display: true,
+            text: "Clasificacion de comentarios",
+            fontColor: 'white'
+        }
+  }
+});
+
+
+
+</script>
+
 </html>
