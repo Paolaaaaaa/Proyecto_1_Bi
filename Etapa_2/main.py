@@ -44,23 +44,13 @@ def read_root():
    return {"Hello": "World"}
 
 
-@app.get("/doc1/",response_class=HTMLResponse)# va a motrar doc1
-def doc2(request: Request):
-   context ={'request':request}
-   return templates.TemplateResponse("doc1.html",context)
 
 @app.get("/doc/",response_class=HTMLResponse) #va a mostrar doc 2 
 def doc1(request: Request):
    context ={'request':request}
    return templates.TemplateResponse("doc1.html",context)
    
-#usa el modelo predictivo, todavía no funciona por completo pero ya casi
-
-@app.get("/index/data/archivo.csv",response_class=HTMLResponse) #va a mostrar doc 2 
-def doc1(request: Request):
-   context ={'request':request}
-   return templates.TemplateResponse("doc2.html",context)
-
+#
 
 @app.get("/movie/{movie_id}")
 def show_moview(movie_id: int, request: Request):
