@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Imagen de ejemplo</title>
+</head>
+<body>
+	<img id="my-image" src="" />
+	<script>
+		function updateImage(encodedImg) {
+			var img = document.getElementById("my-image");
+			img.src = "data:image/png;base64," + encodedImg;
+		}
+	</script>
+</body>
+</html>

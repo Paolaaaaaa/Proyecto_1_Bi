@@ -106,4 +106,12 @@ def render_img(data):
     return encoded_img
      
      
+data = [0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1]
+encoded_img = render_img(data)
 
+with open('./templates/image.html', 'r') as file:
+    filedata = file.read()
+
+filedata = filedata.replace('src=""', 'src="data:image/png;base64,' + encoded_img + '"')
+with open('image.html', 'w') as file:
+    file.write(filedata)

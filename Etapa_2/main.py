@@ -100,4 +100,12 @@ def read_item(nombre_movie: str, review:str):
       
 
 
+@app.get("/resultados/",response_class=HTMLResponse)
+def doc1(request: Request):
+   context ={'request':request}
+   return templates.TemplateResponse("image.html",context)
 
+@app.get("/test")
+def test(request: Request):
+    context ={'request':request}
+    return {"message": "This is a test route"},context
